@@ -63,6 +63,8 @@ def parse_options():
             usage='%(prog)s -w WIDTH -h HEIGHT -r FRAMERATE [options]',
             description='This program continuously captures JPEGs from the CSI camera and writes them to standard output.')
     
+    parser.add_argument('--camera', help='Select camera number (0 or 1, defaults to 0)',
+            type=int, dest='camera_num', default=0)
     parser.add_argument('-w', '--width', help='capture (streaming) width, in pixels (64 to 3280, required)',
             type=int, dest='width', required=False)
     parser.add_argument('-h', '--height', help='capture (streaming) height, in pixels (64 to 2464, required)',
@@ -220,8 +222,8 @@ def init_camera():
 
     logging.debug('initializing camera')
 
-    logging.debug('using resolution %dx%d' % (options.width, options.height))
-    camera = picamera.PiCamera(resolution=(options.width, options.height))
+    logging.debug('using camera %d with resolution %dx%d' % (options.camera_num, options.width, options.height))
+    camera = picamera.PiCamera(camera_num=options.camera_num, resolution=(options.width, options.height))
     
     logging.debug('using framerate = %d' % options.framerate)
     camera.framerate = options.framerate
